@@ -9,7 +9,8 @@ module.exports = class RegExAgent extends Agent
 	{
 		super(name, options ?? {
 			regex: '',
-			filter: false
+			filter: false,
+			negateSignal: false
 		});
 	}
 
@@ -17,13 +18,14 @@ module.exports = class RegExAgent extends Agent
 	{
 		var [, pattern, flags] = this.options.regex.split('/');
 		var regex = new RegExp(pattern, flags);
+		var signal = false;
 
 		if (this.options.filter)
 		{
 			if (event.test(regex))
 			{
 				this.sendEvent(event);
-				this.sendSignal();
+				signal = true;
 			}
 		}
 		else
@@ -33,8 +35,19 @@ module.exports = class RegExAgent extends Agent
 			if (match)
 			{
 				this.sendEvent(match);
-				this.sendSignal();
+				signal = true;
 			}
+		}
+
+		// Negate the signal if the event does not pass the filter
+		if (this.negateSignal)
+		{
+			signal = !signal;
+		}
+
+		if (signal)
+		{
+			this.sendSignal();
 		}
 	}
 }
