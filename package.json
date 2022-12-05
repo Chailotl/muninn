@@ -1,0 +1,22 @@
+{
+  "name": "muninn",
+  "version": "1.0.0",
+  "author": "Chai",
+  "license": "GNU-GPLv3",
+  "description": "A hackable automation system that uses agents and events.",
+  "dependencies": {
+    "body-parser": "^1.19.2",
+    "express": "^4.17.3",
+    "meow": "^10.1.2",
+    "node-cron": "^3.0.0",
+    "node-fetch": "^2.6.7",
+    "node-html-parser": "^5.3.3",
+    "openweather-apis": "^4.4.2"
+  },
+  "keywords": [
+    "cli"
+  ],
+  "bin": {
+    "muninn": "./bin/index.mjs"
+  }
+}
