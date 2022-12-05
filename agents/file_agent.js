@@ -21,7 +21,7 @@ module.exports = class FileAgent extends Agent
 		}
 		catch (e)
 		{
-			log(`${this.name}: Filepath "${this.options.filepath}" does not exist`);
+			log(`Filepath "${this.options.filepath}" does not exist`);
 		}
 	}
 }
