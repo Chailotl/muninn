@@ -32,9 +32,22 @@ module.exports = class HTMLParserAgent extends Agent
 
 			var elm = root.querySelector(value.query);
 
-			if (elm && elm.hasAttribute(value.attribute))
+			if (elm)
 			{
-				payload[key] = elm.getAttribute(value.attribute);
+				var attribute = value.attribute;
+
+				if (attribute == 'innerHTML')
+				{
+					payload[key] = elm.innerHTML;
+				}
+				else if (attribute == 'innerText')
+				{
+					payload[key] = elm.innerText;
+				}
+				else if (elm.hasAttribute(attribute))
+				{
+					payload[key] = elm.getAttribute(value.attribute);
+				}
 			}
 		}
 
