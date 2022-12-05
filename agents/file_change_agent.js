@@ -30,7 +30,7 @@ module.exports = class FileChangeAgent extends Agent
 		}
 		catch (e)
 		{
-			console.log(`${this.name}: Filepath "${this.options.filepath}" does not exist`);
+			log(`${this.name}: Filepath "${this.options.filepath}" does not exist`);
 		}
 	}
 }

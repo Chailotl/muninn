@@ -65,6 +65,7 @@ module.exports = class Agent
 		});
 	}
 
+	// this connects the agent to a target
 	connectToAgent(agent, event, signal)
 	{
 		if (event)
@@ -77,6 +78,7 @@ module.exports = class Agent
 		}
 	}
 
+	// this disconnects the agent from a target
 	disconnectFromAgent(agent, event, signal)
 	{
 		var index = this.eventTargets.indexOf(agent);
@@ -117,5 +119,10 @@ module.exports = class Agent
 		this.eventTargets = serial.eventTargets;
 		this.signalTargets = serial.signalTargets;
 		this.eventQueue = serial.eventQueue;
+	}
+
+	log(message)
+	{
+		console.log(`${this.name}: ${message}`);
 	}
 }

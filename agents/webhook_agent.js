@@ -18,7 +18,7 @@ module.exports = class WebhookAgent extends Agent
 	run()
 	{
 		super.run();
-		webhookEmitter.on(this.options.id, (json) =>
+		webhookEmitter.on(this.options.id, json =>
 		{
 			this.sendEvent(json);
 		});
@@ -36,7 +36,7 @@ module.exports = class WebhookAgent extends Agent
 				body: JSON.stringify(event)
 			}).then(res =>
 			{
-				console.log(res);
+				log(res);
 			});
 		}
 	}
