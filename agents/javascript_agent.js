@@ -18,10 +18,10 @@ module.exports = class JavaScriptAgent extends Agent
 		this.runVM(event);
 	}
 
-	receiveSignal()
+	/*receiveSignal()
 	{
 		this.runVM();
-	}
+	}*/
 
 	runVM(event = null)
 	{
@@ -36,7 +36,8 @@ module.exports = class JavaScriptAgent extends Agent
 		}
 		catch (err)
 		{
-			this.log(err);
+			//console.log(err);
+			this.log(err.toString());
 		}
 	}
 }
