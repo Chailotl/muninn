@@ -123,6 +123,11 @@ module.exports = class Agent
 
 	log(message)
 	{
+		if (typeof message === 'object')
+		{
+			message = JSON.stringify(message);
+		}
+
 		console.log(`${this.name}: ${message}`);
 	}
 }
