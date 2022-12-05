@@ -22,7 +22,7 @@ module.exports = class RegExAgent extends Agent
 
 		if (this.options.filter)
 		{
-			if (event.test(regex))
+			if (regex.test(event))
 			{
 				this.sendEvent(event);
 				signal = true;
