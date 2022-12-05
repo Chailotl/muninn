@@ -31,7 +31,8 @@ module.exports = class DiscordAgent extends Agent
 			var channelId = this.options.channelId;
 			var userId = this.options.userId;
 
-			if (channelId && channelId != msg.channelId ||
+			if (msg.author.id == client.user.id ||
+				channelId && channelId != msg.channelId ||
 				userId && userId != msg.author.id)
 			{
 				return;
