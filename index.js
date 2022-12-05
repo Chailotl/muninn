@@ -4,7 +4,7 @@ const fs = require('fs');
 const events = require('events');
 const dgram = require('dgram');
 
-const PORT = 27015;
+const { port } = require('./config.json');
 
 var activeAgents = [];
 
@@ -289,7 +289,7 @@ global.eventEmitter = new events.EventEmitter();
 global.signalEmitter = new events.EventEmitter();
 
 app.use(bodyParser.json());
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(port, () => console.log(`Server running on port ${port}`));
 app.post('/webhook', (req, res) =>
 {
 	res.status(200).end();
