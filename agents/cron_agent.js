@@ -4,7 +4,7 @@ const cron = require('node-cron');
 // Auto-emitter
 // This emits signals using a cron
 
-module.exports = class TestAgent extends Agent
+module.exports = class CronAgent extends Agent
 {
 	constructor(name, options)
 	{

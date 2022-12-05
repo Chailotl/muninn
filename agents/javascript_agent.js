@@ -4,7 +4,7 @@ const vm = require('vm');
 // Transformer
 // This runs custom javascript when it receives a signal or event
 
-module.exports = class WebhookAgent extends Agent
+module.exports = class JavaScriptAgent extends Agent
 {
 	constructor(name, options)
 	{

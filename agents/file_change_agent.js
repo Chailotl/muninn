@@ -5,7 +5,7 @@ const fs = require('fs');
 // This agent watches for file changes
 // The event property can either be change or rename
 
-module.exports = class FileAgent extends Agent
+module.exports = class FileChangeAgent extends Agent
 {
 	constructor(name, options)
 	{
