@@ -7,6 +7,6 @@ module.exports = class LogAgent extends Agent
 {
 	receiveEvent(event)
 	{
-		log(event);
+		this.log(event);
 	}
 }

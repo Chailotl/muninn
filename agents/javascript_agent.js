@@ -36,7 +36,7 @@ module.exports = class JavaScriptAgent extends Agent
 		}
 		catch (err)
 		{
-			log(err);
+			this.log(err);
 		}
 	}
 }
