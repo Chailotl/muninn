@@ -47,7 +47,7 @@ module.exports = class Agent
 	{
 		this.eventTargets.forEach(target =>
 		{
-			eventEmitter.emit(target, event);
+			eventEmitter.emit(target, structuredClone(event));
 
 			if (this.autoSignal)
 			{
