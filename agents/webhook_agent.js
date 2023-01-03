@@ -34,9 +34,6 @@ module.exports = class WebhookAgent extends Agent
 					'Content-type': 'application/json'
 				},
 				body: JSON.stringify(event)
-			}).then(res =>
-			{
-				this.log(res);
 			});
 		}
 	}
