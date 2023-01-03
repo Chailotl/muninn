@@ -9,15 +9,30 @@ module.exports = class CronAgent extends Agent
 	constructor(name, options)
 	{
 		super(name, options ?? {
-			cron: '* * * * *'
+			cron: '* * * * *',
+			timezone: ''
 		});
 	}
 
 	run()
 	{
-		cron.schedule(this.options.cron, () =>
+		if (cron.validate(this.options.cron))
 		{
-			this.sendSignal()
-		});
+			var options = {};
+
+			if (this.options.timezone)
+			{
+				options.timezone = this.options.timezone;
+			}
+
+			cron.schedule(this.options.cron, () =>
+			{
+				this.sendSignal()
+			}, options);
+		}
+		else
+		{
+			this.log(`Invalid cron expression ${this.options.cron}`);
+		}
 	}
 }
