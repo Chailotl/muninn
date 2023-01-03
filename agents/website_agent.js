@@ -15,9 +15,20 @@ module.exports = class WebsiteAgent extends Agent
 		});
 	}
 
-	async receiveSignal()
+	receiveSignal()
 	{
-		var response = await fetch(this.options.url);
-		this.sendEvent(await response.text());
+		fetch(this.options.url).then(res =>
+		{
+			var contentType = res.headers.get('content-type');
+
+			if (contentType && contentType.indexOf('application/json') != -1)
+			{
+				res.json().then(json => this.sendEvent(json));
+			}
+			else
+			{
+				res.text().then(text => this.sendEvent(text));
+			}
+		});
 	}
 }
