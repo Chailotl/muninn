@@ -1,3 +1,13 @@
+if (!global.structuredClone)
+{
+	global.structuredClone = function structuredClone(objectToClone)
+	{
+		const stringified = JSON.stringify(objectToClone);
+		const parsed = JSON.parse(stringified);
+		return parsed;
+	}
+}
+
 module.exports = class Agent
 {
 	type = '';	// blueprint used to create this agent
