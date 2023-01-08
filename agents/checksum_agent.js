@@ -15,7 +15,7 @@ module.exports = class ChecksumAgent extends Agent
 		});
 	}
 
-	async receiveEvent(event)
+	receiveEvent(event)
 	{
 		var test = typeof event === 'object' ? JSON.stringify(event) : event;
 		var signal = false;
