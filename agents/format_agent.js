@@ -78,6 +78,14 @@ module.exports = class FormatAgent extends Agent
 			format = format.replace(match, str);
 		}
 
-		this.sendEvent(JSON.parse(format));
+		// Try to send as json object
+		try
+		{
+			this.sendEvent(JSON.parse(format));
+		}
+		catch
+		{
+			this.sendEvent(format);
+		}
 	}
 }
