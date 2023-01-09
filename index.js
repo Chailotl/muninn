@@ -1,3 +1,4 @@
+require('fix-esm').register();
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
@@ -55,7 +56,7 @@ function saveAgents()
 	{
 		var serial = agent.serialize();
 		var json = JSON.stringify(serial);
-		fs.writeFileSync(`./serial/${serial.name}.json`, json, 'utf-8');
+		fs.writeFileSync(`./serial/${agent.name}.json`, json, 'utf-8');
 	});
 }
 
