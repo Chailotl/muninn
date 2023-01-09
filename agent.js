@@ -145,7 +145,7 @@ module.exports = class Agent
 	// this serializes the agent to a flat file
 	serialize()
 	{
-		var serial = { type: this.type };
+		var serial = { agent: this.type };
 
 		if (Object.keys(this.options).length > 0)
 		{
@@ -170,7 +170,7 @@ module.exports = class Agent
 	// this deserializes the agent from a flat file
 	deserialize(serial)
 	{
-		this.type = serial.type;
+		this.type = serial.agent;
 		this.options = serial.options ?? {};
 		this.data = serial.data ?? {};
 		this.eventTargets = serial.eventTargets ?? {};

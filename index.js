@@ -321,7 +321,7 @@ fs.readdirSync('./serial/').forEach(file =>
 		++i;
 
 		var serial = JSON.parse(fs.readFileSync(`./serial/${file}`, 'utf-8'));
-		createAgent(serial.type, file.replace('.json', '')).deserialize(serial);
+		createAgent(serial.agent, file.replace('.json', '')).deserialize(serial);
 	}
 });
 
