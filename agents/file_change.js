@@ -12,7 +12,7 @@ module.exports = class FileChangeAgent extends Agent
 	getTriggerOutputs() { return ['trigger']; }
 	getEventOutputs() { return ['output']; }
 
-	run()
+	onRun()
 	{
 		try
 		{

@@ -14,7 +14,7 @@ module.exports = class WeatherAgent extends Agent
 
 	getEventOutputs() { return ['output']; }
 
-	run()
+	onRun()
 	{
 		if (!this.options.units)
 		{

@@ -10,7 +10,7 @@ module.exports = class CronAgent extends Agent
 
 	getTriggerOutputs() { return ['trigger']; }
 
-	run()
+	onRun()
 	{
 		if (cron.validate(this.options.cron))
 		{

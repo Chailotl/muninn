@@ -12,7 +12,7 @@ module.exports = class JavaScriptAgent extends Agent
 
 	getEventOutputs() { return ['output']; }
 
-	run()
+	onRun()
 	{
 		if (!this.options.code)
 		{

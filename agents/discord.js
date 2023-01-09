@@ -14,7 +14,7 @@ module.exports = class DiscordAgent extends Agent
 
 	getEventOutputs() { return ['output']; }
 
-	run()
+	onRun()
 	{
 		if (!token)
 		{

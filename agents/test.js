@@ -14,7 +14,7 @@ module.exports = class TestAgent extends Agent
 		this.log('I am constructed');
 	}
 
-	run()
+	onRun()
 	{
 		this.log('I am running');
 	}

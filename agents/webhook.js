@@ -13,7 +13,7 @@ module.exports = class WebhookAgent extends Agent
 
 	getEventOutputs() { return ['output']; }
 
-	run()
+	onRun()
 	{
 		webhookEmitter.on(this.name, json => this.sendEvent('output', json));
 	}
