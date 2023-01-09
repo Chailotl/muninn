@@ -1,4 +1,4 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 const HTMLParser = require('node-html-parser');
 
 // Transformer
@@ -14,14 +14,13 @@ extract: {
 
 module.exports = class HTMLParserAgent extends Agent
 {
-	constructor(name, options)
-	{
-		super(name, options ?? {
-			extract: {}
-		});
-	}
+	getOptions() { return ['extract']; }
 
-	receiveEvent(event)
+	getEventInputs() { return ['input']; }
+
+	getEventOutputs() { return ['output']; }
+
+	onEvent(input, event)
 	{
 		var root = HTMLParser.parse(event);
 		var payload = {};
@@ -51,6 +50,6 @@ module.exports = class HTMLParserAgent extends Agent
 			}
 		}
 
-		this.sendEvent(payload);
+		this.sendEvent('output', payload);
 	}
 }

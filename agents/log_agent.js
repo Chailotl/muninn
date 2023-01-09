@@ -1,12 +1,14 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 
 // Consumer
 // This logs event to the console
 
 module.exports = class LogAgent extends Agent
 {
-	receiveEvent(event)
+	getEventInputs() { return ['input']; }
+
+	onEvent(input, event)
 	{
-		this.log(event);
+		console.log(event);
 	}
 }

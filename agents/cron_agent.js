@@ -1,18 +1,14 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 const cron = require('node-cron');
 
 // Auto-emitter
-// This emits signals using a cron
+// This emits triggers using a cron
 
 module.exports = class CronAgent extends Agent
 {
-	constructor(name, options)
-	{
-		super(name, options ?? {
-			cron: '* * * * *',
-			timezone: ''
-		});
-	}
+	getOptions() { return ['cron', 'timezone']; }
+
+	getTriggerOutputs() { return ['trigger']; }
 
 	run()
 	{
@@ -25,14 +21,11 @@ module.exports = class CronAgent extends Agent
 				options.timezone = this.options.timezone;
 			}
 
-			cron.schedule(this.options.cron, () =>
-			{
-				this.sendSignal()
-			}, options);
+			cron.schedule(this.options.cron, () => this.sendTrigger('trigger'), options);
 		}
 		else
 		{
-			this.log(`Invalid cron expression ${this.options.cron}`);
+			this.log(`Invalid cron expression "${this.options.cron}"`);
 		}
 	}
 }

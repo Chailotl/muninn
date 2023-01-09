@@ -1,4 +1,4 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 const fetch = require('node-fetch');
 
 // Emitter
@@ -6,16 +6,13 @@ const fetch = require('node-fetch');
 
 module.exports = class WebsiteAgent extends Agent
 {
-	checksum = '';
+	getOptions() { return ['url']; }
+	
+	getTriggerInputs() { return ['trigger']; }
 
-	constructor(name, options)
-	{
-		super(name, options ?? {
-			url: ''
-		});
-	}
+	getEventOutputs() { return ['output']; }
 
-	receiveSignal()
+	onTrigger(input)
 	{
 		fetch(this.options.url).then(res =>
 		{
@@ -23,11 +20,11 @@ module.exports = class WebsiteAgent extends Agent
 
 			if (contentType && contentType.indexOf('application/json') != -1)
 			{
-				res.json().then(json => this.sendEvent(json));
+				res.json().then(json => this.sendEvent('output', json));
 			}
 			else
 			{
-				res.text().then(text => this.sendEvent(text));
+				res.text().then(text => this.sendEvent('output', text));
 			}
 		});
 	}

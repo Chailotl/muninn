@@ -1,30 +1,25 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 
 // Transformer
 // This delays events by a set amount of seconds
 
 module.exports = class DelayAgent extends Agent
 {
-	constructor(name, options)
+	getOptions() { return ['delay']; }
+	
+	getEventInputs() { return ['input']; }
+	getTriggerInputs() { return ['trigger']; }
+
+	getEventOutputs() { return ['output']; }
+	getTriggerOutputs() { return ['trigger']; }
+
+	onEvent(input, event)
 	{
-		super(name, options ?? {
-			delay: 5
-		});
+		setTimeout(() => this.sendEvent('output', event), this.options.delay * 1000);
 	}
 
-	receiveEvent(event)
+	onTrigger(input)
 	{
-		setTimeout(() =>
-		{
-			this.sendEvent(event);
-		}, this.options.delay * 1000);
-	}
-
-	receiveSignal()
-	{
-		setTimeout(() =>
-		{
-			this.sendSignal();
-		}, this.options.delay * 1000);
+		setTimeout(() => this.sendTrigger('trigger'), this.options.delay * 1000);
 	}
 }

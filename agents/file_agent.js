@@ -1,4 +1,4 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 const fs = require('fs');
 
 // Emitter
@@ -6,18 +6,17 @@ const fs = require('fs');
 
 module.exports = class FileAgent extends Agent
 {
-	constructor(name, options)
-	{
-		super(name, options ?? {
-			filepath: ''
-		});
-	}
+	getOptions() { return ['filepath']; }
 
-	receiveSignal()
+	getTriggerInputs() { return ['trigger']; }
+
+	getEventOutputs() { return ['output']; }
+
+	onTrigger(input)
 	{
 		try
 		{
-			this.sendEvent(fs.readFileSync(this.options.filepath, 'utf-8'));
+			this.sendEvent('output', fs.readFileSync(this.options.filepath, 'utf-8'));
 		}
 		catch (e)
 		{

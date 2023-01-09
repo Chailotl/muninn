@@ -1,4 +1,4 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 const vm = require('vm');
 
 // Transformer
@@ -6,14 +6,21 @@ const vm = require('vm');
 
 module.exports = class JavaScriptAgent extends Agent
 {
-	constructor(name, options)
+	getOptions() { return ['code']; }
+
+	getEventInputs() { return ['input']; }
+
+	getEventOutputs() { return ['output']; }
+
+	run()
 	{
-		super(name, options ?? {
-			code: 'return "Hello world!";'
-		});
+		if (!this.options.code)
+		{
+			this.options.code = 'return "Hello world!";';
+		}
 	}
 
-	receiveEvent(event)
+	onEvent(input, event)
 	{
 		this.runVM(event);
 	}
@@ -31,7 +38,7 @@ module.exports = class JavaScriptAgent extends Agent
 
 			if (result)
 			{
-				this.sendEvent(result);
+				this.sendEvent('output', result);
 			}
 		}
 		catch (err)

@@ -1,10 +1,13 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 
 // Consumer
 // This is a test agent that prints to the console
 
 module.exports = class TestAgent extends Agent
 {
+	getEventInputs() { return ['input']; }
+	getTriggerInputs() { return ['trigger']; }
+
 	constructor(name, options)
 	{
 		super(name, options);
@@ -13,18 +16,16 @@ module.exports = class TestAgent extends Agent
 
 	run()
 	{
-		super.run();
 		this.log('I am running');
 	}
 
-	receiveEvent(event)
+	onEvent(input, event)
 	{
 		this.log(`I received an event: ${event}`);
 	}
 
-	receiveSignal()
+	onTrigger(input)
 	{
-		super.receiveSignal();
 		this.log('I received a signal');
 	}
 }

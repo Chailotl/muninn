@@ -1,4 +1,4 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 const os = require('os');
 
 // Emitter
@@ -6,7 +6,11 @@ const os = require('os');
 
 module.exports = class SystemMonitorAgent extends Agent
 {
-	receiveSignal()
+	getTriggerInputs() { return ['trigger']; }
+
+	getEventOutputs() { return ['output']; }
+
+	onTrigger(input)
 	{
 		var event = {
 			uptime: os.uptime(),
@@ -17,6 +21,6 @@ module.exports = class SystemMonitorAgent extends Agent
 			cpus: os.cpus()
 		};
 
-		this.sendEvent(event);
+		this.sendEvent('output', event);
 	}
 }

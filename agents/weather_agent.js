@@ -1,4 +1,4 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 const weather = require('openweather-apis');
 
 const apiKey = require('./../config.json').openWeather_key;
@@ -8,28 +8,34 @@ const apiKey = require('./../config.json').openWeather_key;
 
 module.exports = class WeatherAgent extends Agent
 {
-	constructor(name, options)
-	{
-		super(name, options ?? {
-			cityId: 0,
-			units: 'metric',
-			language: 'en'
-		});
-	}
+	getOptions() { return ['cityId', 'units', 'language']; }
+
+	getTriggerInputs() { return ['trigger']; }
+
+	getEventOutputs() { return ['output']; }
 
 	run()
 	{
+		if (!this.options.units)
+		{
+			this.options.units = 'metric';
+		}
+		if (!this.options.langauge)
+		{
+			this.options.language = 'en';
+		}
+
 		weather.setAPPID(apiKey);
 		weather.setCityId(this.options.cityId);
 		weather.setUnits(this.options.units);
 		weather.setLang(this.options.language);
 	}
 
-	receiveSignal()
+	onTrigger(input)
 	{
 		weather.getSmartJSON((err, smart) =>
 		{
-			this.sendEvent(smart);
+			this.sendEvent('output', smart);
 		});
 	}
 }

@@ -1,4 +1,4 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 const fs = require('fs');
 
 // Auto-emitter
@@ -7,12 +7,10 @@ const fs = require('fs');
 
 module.exports = class FileChangeAgent extends Agent
 {
-	constructor(name, options)
-	{
-		super(name, options ?? {
-			filepath: ''
-		});
-	}
+	getOptions() { return ['filepath']; }
+
+	getTriggerOutputs() { return ['trigger']; }
+	getEventOutputs() { return ['output']; }
 
 	run()
 	{
@@ -20,12 +18,12 @@ module.exports = class FileChangeAgent extends Agent
 		{
 			fs.watch(this.options.filepath, (event, filename) =>
 			{
-				this.sendEvent({
+				this.sendEvent('output', {
 					event: event,
 					filename: filename
 				});
 
-				this.sendSignal()
+				this.sendTrigger('trigger');
 			});
 		}
 		catch (e)

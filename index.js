@@ -8,12 +8,11 @@ const { port } = require('./config.json');
 
 var activeAgents = [];
 
-function createAgent(type, name, options = null)
+function createAgent(type, name)
 {
 	if (agents[type])
 	{
-		var agent = new agents[type](name, options);
-		agent.type = type;
+		var agent = new agents[type](type, name);
 		activeAgents.push(agent);
 		return agent;
 	}
@@ -59,6 +58,7 @@ function saveAgents()
 		fs.writeFileSync(`./serial/${serial.name}.json`, json, 'utf-8');
 	});
 }
+
 
 // CLI bullshit
 var s = dgram.createSocket('udp4');
@@ -120,7 +120,7 @@ s.on('message', function (msg, rinfo)
 			}
 			break;
 
-		case 'options':
+		/*case 'options':
 			var key = flags.key;
 			var value = flags.value;
 
@@ -143,29 +143,34 @@ s.on('message', function (msg, rinfo)
 				result = `Option "${key}" changed to "${value}" in agent "${name}"`;
 				saveAgents();
 			}
-			break;
+			break;*/
 
 		case 'view':
 			result = 'This command is unfinished';
 			break;
 
-		case 'connect':
-			var to = flags.to;
+		case 'pipe':
 			var from = flags.from;
-			var event = flags.event;
-			var signal = flags.signal;
+			var to = flags.to;
+			var output = flags.output;
+			var input = flags.input;
+			var isTrigger = !flags.trigger;
 
 			if (!from)
 			{
-				result = 'Missing "from"';
+				result = 'Missing from';
 			}
 			else if (!to)
 			{
-				result = 'Missing "to"';
+				result = 'Missing to';
 			}
-			else if (!event && !signal)
+			else if (!output)
 			{
-				result = 'Neither "event" nor "signal" was specified';
+				result = 'Missing output';
+			}
+			else if (!input)
+			{
+				result = 'Missing input';
 			}
 			else if (!getAgent(from))
 			{
@@ -178,71 +183,57 @@ s.on('message', function (msg, rinfo)
 			else
 			{
 				var agent = getAgent(from);
-				var str = '';
 
-				agent.connectToAgent(to, event, signal);
+				agent.pipe(output, to, input, isTrigger);
 
-				if (event && signal)
-				{
-					str = 'events and signals';
-				}
-				else
-				{
-					str = event ? 'events' : 'signals';
-				}
-
-				result = `Agent "${from}" sending ${str} to agent "${to}"`; saveAgents();
-			}
-			break;
-
-		case 'disconnect':
-			var to = flags.to;
-			var from = flags.from;
-			var event = flags.event;
-			var signal = flags.signal;
-
-			if (!from)
-			{
-				result = 'Missing "from"';
-			}
-			else if (!to)
-			{
-				result = 'Missing "to"';
-			}
-			else if (!event && !signal)
-			{
-				result = 'Neither "event" nor "signal" was specified';
-			}
-			else if (!getAgent(from))
-			{
-				result = `Agent "${from}" does not exist`;
-			}
-			else if (!getAgent(to))
-			{
-				result = `Agent "${to}" does not exist`;
-			}
-			else
-			{
-				var agent = getAgent(from);
-				var str = '';
-
-				agent.disconnectFromAgent(to, event, signal);
-
-				if (event && signal)
-				{
-					str = 'events and signals';
-				}
-				else
-				{
-					str = event ? 'events' : 'signals';
-				}
-
-				result = `Agent "${from}" no longer sending ${str} to agent "${to}"`;
+				results = `Piping agent "${from}"'s output "${output}" to "${to}"'s intput "${input}"`
 				saveAgents();
 			}
 			break;
 
-		case 'signal':
+		case 'unpipe':
+			var from = flags.from;
+			var to = flags.to;
+			var output = flags.output;
+			var input = flags.input;
+			var isTrigger = !flags.trigger;
+
+			if (!from)
+			{
+				result = 'Missing from';
+			}
+			else if (!to)
+			{
+				result = 'Missing to';
+			}
+			else if (!output)
+			{
+				result = 'Missing output';
+			}
+			else if (!input)
+			{
+				result = 'Missing input';
+			}
+			else if (!getAgent(from))
+			{
+				result = `Agent "${from}" does not exist`;
+			}
+			else if (!getAgent(to))
+			{
+				result = `Agent "${to}" does not exist`;
+			}
+			else
+			{
+				var agent = getAgent(from);
+
+				agent.unpipe(output, to, input, isTrigger);
+
+				results = `Unpiping agent "${from}"'s output "${output}" to "${to}"'s intput "${input}"`
+				saveAgents();
+			}
+			break;
+
+		case 'trigger':
 			var agent = getAgent(name);
 			if (!agent)
 			{
@@ -250,8 +241,8 @@ s.on('message', function (msg, rinfo)
 			}
 			else
 			{
-				agent.receiveSignal();
-				result = `Sending signal to agent "${name}"`;
+				agent.onTrigger('trigger');
+				result = `Triggering agent "${name}"`;
 			}
 			break;
 
@@ -286,7 +277,7 @@ s.bind(63036, 'localhost', () =>
 const app = express();
 global.webhookEmitter = new events.EventEmitter();
 global.eventEmitter = new events.EventEmitter();
-global.signalEmitter = new events.EventEmitter();
+global.triggerEmitter = new events.EventEmitter();
 
 app.use(bodyParser.json());
 app.listen(port, () => console.log(`Server running on port ${port}`));
@@ -298,13 +289,13 @@ app.post('/webhook', (req, res) =>
 });
 
 
-// Loading agent blueprints
-console.log('Loading agent blueprints...');
+// Loading agent templates
+console.log('Loading agent templates...');
 
 var i = 0;
 var agents = {};
 
-fs.readdirSync('./agents/').forEach((file) =>
+fs.readdirSync('./agents/').forEach(file =>
 {
 	if (file != 'agent.js' && file.endsWith('.js'))
 	{
@@ -314,7 +305,7 @@ fs.readdirSync('./agents/').forEach((file) =>
 	}
 });
 
-console.log(`Loaded ${i} agent blueprints\n`);
+console.log(`Loaded ${i} agent templates\n`);
 
 
 // Loading agents
@@ -322,7 +313,7 @@ console.log('Loading agents...');
 
 i = 0;
 
-fs.readdirSync('./serial/').forEach((file) =>
+fs.readdirSync('./serial/').forEach(file =>
 {
 	if (file.endsWith('.json'))
 	{
@@ -330,7 +321,7 @@ fs.readdirSync('./serial/').forEach((file) =>
 		++i;
 
 		var serial = JSON.parse(fs.readFileSync(`./serial/${file}`, 'utf-8'));
-		createAgent(serial.type, serial.name).deserialize(serial);
+		createAgent(serial.type, file.replace('.json', '')).deserialize(serial);
 	}
 });
 
@@ -339,5 +330,5 @@ console.log(`Loaded ${i} agents\n`);
 // Run all agents
 for (var agent of activeAgents)
 {
-	agent.run();
+	agent.onRun();
 }

@@ -35,6 +35,14 @@ const cli = meow(`
 		to: {
 			type: 'string',
 			alias: 't'
+		},
+		input: {
+			type: 'string',
+			alias: 'i'
+		},
+		output: {
+			type: 'string',
+			alias: 'o'
 		}
 	}
 });

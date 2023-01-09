@@ -1,4 +1,4 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 
 // Transformer
 // This agent can reformat JSON objects as a different JSON object
@@ -20,14 +20,13 @@ format: {
 
 module.exports = class FormatAgent extends Agent
 {
-	constructor(name, options)
-	{
-		super(name, options ?? {
-			format: ''
-		});
-	}
+	getOptions() { return ['format']; }
 
-	receiveEvent(event)
+	getEventInputs() { return ['input']; }
+
+	getEventOutputs() { return ['output']; }
+
+	onEvent(input, event)
 	{
 		var format = this.options.format;
 		if (typeof format === 'object') { format = JSON.stringify(format) };
@@ -81,11 +80,11 @@ module.exports = class FormatAgent extends Agent
 		// Try to send as json object
 		try
 		{
-			this.sendEvent(JSON.parse(format));
+			this.sendEvent('output', JSON.parse(format));
 		}
 		catch
 		{
-			this.sendEvent(format);
+			this.sendEvent('output', format);
 		}
 	}
 }

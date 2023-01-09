@@ -1,4 +1,4 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 const { Client, Events, GatewayIntentBits } = require('discord.js');
 
 const token = require('./../config.json').discord_token;
@@ -8,18 +8,14 @@ const token = require('./../config.json').discord_token;
 
 module.exports = class DiscordAgent extends Agent
 {
-	constructor(name, options)
-	{
-		super(name, options ?? {
-			channelId: '',
-			userId: '',
-			advancedOutput: false
-		});
-	}
+	getOptions() { return ['channelId', 'userId', 'advancedOutput']; }
+
+	getEventInputs() { return ['input']; }
+
+	getEventOutputs() { return ['output']; }
 
 	run()
 	{
-		super.run();
 		if (!token)
 		{
 			this.log('No Discord token provided');
@@ -49,11 +45,11 @@ module.exports = class DiscordAgent extends Agent
 				};
 			}
 
-			this.sendEvent(event);
+			this.sendEvent('output', event);
 		});
 	}
 
-	receiveEvent(event)
+	onEvent(input, event)
 	{
 		if (!token)
 		{

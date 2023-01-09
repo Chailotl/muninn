@@ -1,53 +1,32 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 
 // Transfomer/filter
 // This captures data from an event using regex
 
 module.exports = class RegExAgent extends Agent
 {
-	constructor(name, options)
-	{
-		super(name, options ?? {
-			regex: '',
-			filter: false,
-			negateSignal: false
-		});
-	}
+	getOptions() { return ['regex']; }
 
-	receiveEvent(event)
+	getEventInputs() { return ['input']; }
+
+	getEventOutputs() { return ['match', 'pass', 'fail']; }
+	getTriggerOutputs() { return ['pass', 'fail']; }
+
+	onEvent(input, event)
 	{
 		var [, pattern, flags] = this.options.regex.split('/');
 		var regex = new RegExp(pattern, flags);
-		var signal = false;
 
-		if (this.options.filter)
+		if (regex.test(event))
 		{
-			if (regex.test(event))
-			{
-				this.sendEvent(event);
-				signal = true;
-			}
+			this.sendEvent('match', event.match(regex));
+			this.sendEvent('pass', event);
+			this.sendTrigger('pass');
 		}
 		else
 		{
-			var match = event.match(regex);
-
-			if (match)
-			{
-				this.sendEvent(match);
-				signal = true;
-			}
-		}
-
-		// Negate the signal if the event does not pass the filter
-		if (this.negateSignal)
-		{
-			signal = !signal;
-		}
-
-		if (signal)
-		{
-			this.sendSignal();
+			this.sendEvent('fail', event);
+			this.sendTrigger('fail');
 		}
 	}
 }

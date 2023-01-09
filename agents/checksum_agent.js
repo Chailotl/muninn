@@ -1,4 +1,4 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 const crypto = require('crypto');
 
 // Filter
@@ -6,53 +6,34 @@ const crypto = require('crypto');
 
 module.exports = class ChecksumAgent extends Agent
 {
-	checksum = '';
+	getEventInputs() { return ['input']; }
 
-	constructor(name, options)
+	getEventOutputs() { return ['pass', 'fail']; }
+	getTriggerOutputs() { return ['pass', 'fail']; }
+
+	onRun()
 	{
-		super(name, options ?? {
-			negateSignal: false
-		});
+		if (!this.data.checksum)
+		{
+			this.data.checksum = '';
+		}
 	}
 
-	receiveEvent(event)
+	onEvent(input, event)
 	{
 		var test = typeof event === 'object' ? JSON.stringify(event) : event;
-		var signal = false;
-
 		var hash = crypto.createHash('md5').update(test).digest('hex');
-		if (hash != this.checksum)
+
+		if (hash != this.data.checksum)
 		{
-			this.sendEvent(event);
-			signal = true;
-			this.checksum = hash;
+			this.sendEvent('pass', event);
+			this.sendTrigger('pass');
+			this.data.checksum = hash;
 		}
-
-		// Negate the signal if the event does not pass the filter
-		if (this.negateSignal)
+		else
 		{
-			signal = !signal;
+			this.sendEvent('fail', event);
+			this.sendTrigger('fail');
 		}
-
-		if (signal)
-		{
-			this.sendSignal();
-		}
-	}
-
-	serialize()
-	{
-		var serial = super.serialize();
-
-		serial.checksum = this.checksum;
-
-		return serial;
-	}
-
-	deserialize(serial)
-	{
-		super.deserialize(serial);
-
-		this.checksum = serial.checksum;
 	}
 }

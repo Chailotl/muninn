@@ -1,19 +1,18 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 
 // Emitter
-// This sends a custom payload when signaled
+// This sends a custom payload when triggered
 
 module.exports = class CustomEventAgent extends Agent
 {
-	constructor(name, options)
-	{
-		super(name, options ?? {
-			payload: 'Hello world!'
-		});
-	}
+	getOptions() { return ['payload']; }
 
-	receiveSignal()
+	getTriggerInputs() { return ['trigger']; }
+
+	getEventOutputs() { return ['output']; }
+
+	onTrigger(input)
 	{
-		this.sendEvent(this.options.payload);
+		this.sendEvent('output', this.options.payload);
 	}
 }

@@ -1,4 +1,4 @@
-const Agent = require('./agent.js');
+const Agent = require('./../agent.js');
 const fetch = require('node-fetch');
 
 // Auto-emitter/consumer
@@ -7,24 +7,18 @@ const fetch = require('node-fetch');
 
 module.exports = class WebhookAgent extends Agent
 {
-	constructor(name, options)
-	{
-		super(name, options ?? {
-			url: '',
-			id: ''
-		});
-	}
+	getOptions() { return ['url']; }
+
+	getEventInputs() { return ['input']; }
+
+	getEventOutputs() { return ['output']; }
 
 	run()
 	{
-		super.run();
-		webhookEmitter.on(this.options.id, json =>
-		{
-			this.sendEvent(json);
-		});
+		webhookEmitter.on(this.name, json => this.sendEvent('output', json));
 	}
 
-	receiveEvent(event)
+	onEvent(input, event)
 	{
 		if (typeof event === 'object')
 		{
