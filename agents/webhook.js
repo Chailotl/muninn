@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 
 // Auto-emitter/consumer
 // This agent can either react to HTML posts to the /webhook url, or emit its own webhooks
-// ip:port/webhook?agent=id
+// ip:port/webhook?agent=name
 
 module.exports = class WebhookAgent extends Agent
 {
