@@ -45,7 +45,7 @@ module.exports = class PushBulletCreatePushAgent extends Agent
 				'Access-Token': token
 			},
 			body: JSON.stringify({
-				device_iden: even.deviceId ?? this.options.deviceId,
+				device_iden: event.deviceId ?? this.options.deviceId,
 				type: event.type ?? this.options.type,
 				title: event.title ?? this.options.title,
 				body: event.body ?? this.options.body,
