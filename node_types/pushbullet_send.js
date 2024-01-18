@@ -4,6 +4,7 @@ const token = require('../config.json').pushBullet_token;
 
 module.exports = class PushBulletSendNode extends Node
 {
+	getDescription() { return 'This node pushes notes to Pushbullet.'; }
 	getDefaultConfig() { return { deviceId: '', title: 'Muninn', body: '' }; }
 	getInputs() { return ['trigger', 'input']; }
 
