@@ -4,7 +4,7 @@ module.exports = class DiscordSendNode extends Node
 {
 	getDescription() { return 'This node will send Discord messages to the configured channel.'; };
 	getDefaultConfig() { return { channelId: '', message: '' }; }
-	getInputs() { return ['trigger', 'message']; }
+	getInputs() { return ['trigger', 'input']; }
 
 	onEvent(input, event)
 	{
@@ -29,7 +29,7 @@ module.exports = class DiscordSendNode extends Node
 
 		let message = this.config.payload;
 
-		if (input == 'message')
+		if (input == 'input')
 		{
 			// Message can be either a string or an object (embed)
 			message = event.payload;
