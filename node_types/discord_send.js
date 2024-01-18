@@ -20,6 +20,12 @@ module.exports = class DiscordSendNode extends Node
 			logger.warn('No channel ID provided');
 			return;
 		}
+		else if (!discord.isReady())
+		{
+			// If Discord client isn't ready yet, just delay the event a little
+			setTimeout(() => this.onEvent(input, event), 1000);
+			return;
+		}
 
 		let message = this.config.payload;
 
