@@ -1,26 +1,20 @@
 {
-  "name": "muninn",
-  "version": "1.0.0",
-  "author": "Chai",
-  "license": "GNU-GPLv3",
-  "description": "A hackable automation system that uses agents and events.",
-  "dependencies": {
-    "body-parser": "^1.19.2",
-    "discord.js": "^14.7.1",
-    "express": "^4.17.3",
-    "fix-esm": "^1.0.1",
-    "meow": "^10.1.2",
-    "node-cron": "^3.0.0",
-    "node-fetch": "^2.6.7",
-    "node-html-parser": "^5.3.3",
-    "openweather-apis": "^4.4.2",
-    "osc": "^2.4.1",
-    "pushbullet": "^3.0.0"
-  },
-  "keywords": [
-    "cli"
-  ],
-  "bin": {
-    "muninn": "./bin/index.mjs"
-  }
+	"name": "muninn",
+	"version": "1.0.0",
+	"author": "Chai",
+	"license": "GNU-GPLv3",
+	"description": "A hackable node-based automation system.",
+	"dependencies": {
+		"body-parser": "^1.20.2",
+		"chatgpt": "^5.2.5",
+		"colors": "^1.4.0",
+		"discord.js": "^14.14.1",
+		"express": "^4.18.2",
+		"fix-esm": "^1.0.1",
+		"lua-in-js": "^2.2.4",
+		"node-cron": "^3.0.3",
+		"node-html-parser": "^6.1.12",
+		"openweather-apis": "^4.5.0",
+		"python-shell": "^5.0.0"
+	}
 }
