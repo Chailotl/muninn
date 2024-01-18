@@ -30,8 +30,8 @@ graph.pipeNode('startup', 'output', 'custom', 'trigger');
 graph.pipeNode('custom', 'output', 'checksum', 'input');
 graph.pipeNode('checksum', 'change', 'log', 'input');*/
 
-//graph.createNode('pushbullet_list_devices', 'pushbullet_list_devices');
-//graph.pipeNode('startup', 'trigger', 'pushbullet_list_devices', 'trigger');
+//graph.createNode('stdio', 'stdio');
+//graph.pipeNode('stdio', 'stdout', 'discord_send', 'message');
 //graph.pipeNode('pushbullet_list_devices', 'output', 'log', 'input');
 
 graph.activateNodes();
