@@ -11,19 +11,13 @@ module.exports = class PythonNode extends Node
 
 	onEvent(input, event)
 	{
+		// We don't want to catch the error here, we have a better error catcher downstream
 		let code = this.config.code.replaceAll('\n', '\n\t');
 
-		try
+		PythonShell.runString(`import sys, json\npayload=sys.argv[1]\ndef run():\n\t${code}\nprint(json.dumps(run()))`, { mode: 'json', args: event.payload }).then(messages =>
 		{
-			PythonShell.runString(`import sys, json\npayload=sys.argv[1]\ndef run():\n\t${code}\nprint(json.dumps(run()))`, { mode: 'json', args: event.payload }).then(messages =>
-			{
-				event.payload = messages[0];
-				this.sendEvent('output', event);
-			});
-		}
-		catch (err)
-		{
-			logger.error(err.toString());
-		}
+			event.payload = messages[0];
+			this.sendEvent('output', event);
+		});
 	}
 }

@@ -11,19 +11,13 @@ module.exports = class JavaScriptNode extends Node
 
 	onEvent(input, event)
 	{
-		try
-		{
-			let result = vm.runInNewContext(`function run() {${this.config.code}}; run();`, { payload: event.payload }, { timeout: 2000, displayErrors: true, require: { external: true, root: './' } });
+		// We don't want to catch the error here, we have a better error catcher downstream
+		let result = vm.runInNewContext(`function run() {${this.config.code}}; run();`, { payload: event.payload }, { timeout: 2000, displayErrors: true, require: { external: true, root: './' } });
 
-			if (result)
-			{
-				event.payload = result;
-				this.sendEvent('output', event);
-			}
-		}
-		catch (err)
+		if (result)
 		{
-			logger.error(err.toString());
+			event.payload = result;
+			this.sendEvent('output', event);
 		}
 	}
 }
