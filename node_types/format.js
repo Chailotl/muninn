@@ -24,14 +24,14 @@ module.exports = class FormatNode extends Node
 	]
 }`;
 	}
-	getDefaultConfig() { return { format: '' }; }
+	getDefaultConfig() { return { format: '', parseAsJson: false }; }
 	getInputs() { return ['input']; }
 	getOutputs() { return ['output']; }
 
 	onEvent(input, event)
 	{
 		let format = this.config.format;
-		let isObject = false;
+		let isObject = this.config.parseAsJson;
 		if (typeof format === 'object')
 		{
 			isObject = true;
