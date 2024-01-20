@@ -33,11 +33,11 @@ module.exports = class Node
 				{
 					this.onEvent(input, event);
 				}
-				catch (e)
+				catch (err)
 				{
 					logger.error(`Node "${this.name}" threw an error`);
 					logger.debug(event);
-					console.error(e);
+					console.error(err);
 				}
 			});
 		});
@@ -156,5 +156,12 @@ module.exports = class Node
 			return true;
 		}
 		return false;
+	}
+
+	error(err, event)
+	{
+		logger.error(`Node "${this.name}" threw an error`);
+		logger.debug(event);
+		console.error(err);
 	}
 }
