@@ -1,5 +1,4 @@
 const Node = require('../node.js');
-const logger = require('../logger.js');
 
 module.exports = class WebhookSendNode extends Node
 {
@@ -14,15 +13,7 @@ module.exports = class WebhookSendNode extends Node
 		if (typeof body === 'string')
 		{
 			// Checking if the string is valid JSON
-			try
-			{
-				JSON.parse(str);
-			}
-			catch (e)
-			{
-				logger.warn('Invalid JSON');
-				return;
-			}
+			JSON.parse(str);
 		}
 		else
 		{
