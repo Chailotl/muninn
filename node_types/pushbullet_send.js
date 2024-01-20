@@ -1,10 +1,10 @@
 const Node = require('../node.js');
 
-const token = require('../config.json').pushBullet_token;
+const token = require('../config.json').pushbullet_token;
 
-module.exports = class PushBulletSendNode extends Node
+module.exports = class PushbulletSendNode extends Node
 {
-	getDescription() { return 'This node pushes notes to Pushbullet.'; }
+	getDescription() { return 'This node lets you send push notifications to any of your devices using Pushbullet.'; }
 	getDefaultConfig() { return { deviceId: '', title: 'Muninn', body: '' }; }
 	getInputs() { return ['trigger', 'input']; }
 
