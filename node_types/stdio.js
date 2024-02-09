@@ -20,7 +20,7 @@ module.exports = class StdioNode extends Node
 		{
 			stderr = this.filterAnsiEscapeSeq(stderr);
 
-			this.sendEvent('stdout', new Event(stderr));
+			this.sendEvent('stderr', new Event(stderr));
 		});
 	}
 
