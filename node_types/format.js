@@ -74,7 +74,7 @@ module.exports = class FormatNode extends Node
 				replacedMatch = replacedMatch.replace(regex, '');
 			}
 
-			let str = JSON.stringify(obj);
+			let str = typeof obj === 'object' ? JSON.stringify(obj) : obj;
 			if (str.startsWith('"') && str.endsWith('"'))
 			{
 				str = str.slice(1, str.length - 1);
